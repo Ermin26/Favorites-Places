@@ -16,7 +16,19 @@ function ImagePicker(){
             return permission.granted;
         }
         if(permissionStatus.status === PermissionStatus.DENIED){
-            alert('Please grant camera permissions to use the camera.');
+            const retryPermission = await reqPermission();
+            if (retryPermission.status === PermissionStatus.GRANTED) {
+                return true;
+            }
+            Alert.alert(
+                'Permission required',
+                'Please enable location permissions in settings.',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'Try Again', onPress: verifyPermissions }, // 🔄 Poskusi še enkrat
+                    { text: 'Open Settings', onPress: () => Linking.openSettings() }
+                ]
+            );
             return false;
         }
         return true;
