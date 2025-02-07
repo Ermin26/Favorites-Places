@@ -17,7 +17,8 @@
     "react-native": "0.76.6",
     "expo-camera": "~16.0.14",
     "expo-image-picker": "~16.0.5",
-    "expo-location": "~18.0.5"
+    "expo-location": "~18.0.5",
+    "react-native-maps": "1.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

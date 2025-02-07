@@ -1,11 +1,17 @@
-import { View, StyleSheet, Linking, Alert } from "react-native";
-import OutlineBtn from "../ui/OutlineBtn";
+import { View, StyleSheet, Linking, Alert, Image, Text } from "react-native";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Colors } from '../../constants/colors'
-import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from 'expo-location'
+import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from 'expo-location';
+import {getMapPreview} from '../../util/location';
+import OutlineBtn from "../ui/OutlineBtn";
+
 
 
 function LocationPicker(){
+    const navigation = useNavigation();
     const [permissionStatus, reqPermission] = useForegroundPermissions();
+    const [pickedLoc, setPickedLoc] = useState();
 
     async function verifyPermissions() {
         if(permissionStatus.status === PermissionStatus.UNDETERMINED){
@@ -33,15 +39,28 @@ function LocationPicker(){
             return;
         }
         const userLocation = await getCurrentPositionAsync();
-        console.log(userLocation.coords);
+        setPickedLoc({
+            lat: userLocation.coords.latitude,
+            lng: userLocation.coords.longitude,
+        });
     }
 
 
-    function pickOnMap(){}
+    function pickOnMap(){
+        navigation.navigate('Map');
+    }
+
+    let locPreview = <Text>No location Picked yet.</Text>
+
+    if(pickedLoc){
+        locPreview = <Image style={styles.image} source={{uri: getMapPreview({lat: pickedLoc.lat, lng: pickedLoc.lng})}} />;
+    }
 
     return (
         <View>
-            <View style={styles.mapPreview}></View>
+            <View style={styles.mapPreview}>
+                {locPreview}
+            </View>
             <View style={styles.actions}>
                 <OutlineBtn icon="location" onPress={getLocation} >Locate User</OutlineBtn>
                 <OutlineBtn icon="map" onPress={pickOnMap} >Pick on map</OutlineBtn>
@@ -67,6 +86,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent:'space-around',
         alignItems: 'center'
+    },
+    image:{
+        width: '100%',
+        height: '100%',
+        borderRadius: 4,
+        overflow: 'hidden',
     }
 });
 
