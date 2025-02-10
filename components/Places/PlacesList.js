@@ -9,13 +9,19 @@ function PlacesList({places}){
             <Text style={styles.fallbackText}>No added places</Text>
         </View>
     }
-    return <FlatList data={places} keyExtractor={(item) => item.id} renderItem={({item})=>{<PlaceItem place={item} />}} />
+    //console.log("This is places from flatList",places);
+    return (
+        <FlatList style={styles.list} data={places} keyExtractor={(item) => item.id} renderItem={({item})=>{<PlaceItem place={item} />}} />
+    )
 }
 
 
 export default PlacesList;
 
 const styles = StyleSheet.create({
+    list:{
+        margin: 24,
+    },
     fallbackContainer:{
         flex: 1,
         justifyContent: 'center',

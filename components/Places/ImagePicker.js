@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Colors } from '../../constants/colors';
 import OutlineBtn from '../ui/OutlineBtn';
 
-function ImagePicker(){
+function ImagePicker({imageTaken}){
     const [pickedImage, setPickedImage] = useState();
     //! verifyPermissions is for iOS, otherwise it will not open camera because it is not granted permission
     const [permissionStatus, reqPermission] = useCameraPermissions();
@@ -44,7 +44,8 @@ function ImagePicker(){
             aspect: [16, 9],
             quality: 0.5,
         });
-        setPickedImage(image.assets[0].uri);
+        await setPickedImage(image.assets[0].uri);
+        imageTaken(image.assets[0].uri)
     }
 let imagePreview = <Text style={styles.text}>No image taken yet.</Text>
 

@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigation, useRoute, useIsFocused } from "@react-navigation/native";
 import { Colors } from '../../constants/colors'
 import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from 'expo-location';
-import {getMapPreview} from '../../util/location';
+import {getMapPreview, getAddress} from '../../util/location';
 import OutlineBtn from "../ui/OutlineBtn";
 
 
 
-function LocationPicker(){
+function LocationPicker({locationPicked}){
     const [pickedLoc, setPickedLoc] = useState();
     const isFocused = useIsFocused(); // use this if you return some data from one screen to one where you will be redirected
 
@@ -27,6 +27,16 @@ function LocationPicker(){
             setPickedLoc(mapPickedLocation);
         }
     },[route, isFocused]);
+
+    useEffect(()=>{
+        async function handleLocation(){
+            if(pickedLoc){
+                const address = await getAddress({lat: pickedLoc.lat, lng: pickedLoc.lng});
+                locationPicked({...pickedLoc,address:address});
+            }
+        }
+        handleLocation();
+    }, [pickedLoc])
 
     async function verifyPermissions() {
         const permission = await reqPermission();
