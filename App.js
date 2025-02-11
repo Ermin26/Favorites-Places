@@ -1,11 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import IconBtn from './components/ui/IconBtn';
 import AllPlaces from './screens/AllPlaces';
 import AddPlace from './screens/AddPlace';
 import Map from './screens/Map';
+import PlaceDetails from './screens/PlaceDetails';
 import { Colors } from './constants/colors';
+import { init } from './util/database';
+import AppLoading from 'expo-app-loading';
 
 
 const Stack = createNativeStackNavigator();
@@ -13,6 +17,21 @@ const Stack = createNativeStackNavigator();
 
 
 export default function App() {
+
+  const [dbInitialized, setDbInitialized] = useState(false);
+
+  useEffect(()=>{
+    init().then(() => {
+      setDbInitialized(true);
+    }).catch(err => {
+      console.log(err);
+    });
+
+  },[]);
+
+  if(!dbInitialized){
+    return <AppLoading />
+  }
   return (
     <>
     <StatusBar />
@@ -31,6 +50,9 @@ export default function App() {
         />
         <Stack.Screen name='AddPlace' component={AddPlace} options={{title: 'Add a new place'}} />
         <Stack.Screen name='Map' component={Map} options={{title: 'Pick location'}} />
+        <Stack.Screen name='PlaceDetails' component={PlaceDetails} options={{
+          title: 'Loading place...'
+        }} />
       </Stack.Navigator>
 
     </NavigationContainer>
