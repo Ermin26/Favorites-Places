@@ -40,6 +40,9 @@ function Map({navigation, route}){
 
     useLayoutEffect(() => {
         if(initialLocation){
+            navigation.setOptions({
+                title: "Selected Location",
+            });
             return;
         }
         navigation.setOptions({
@@ -49,9 +52,10 @@ function Map({navigation, route}){
             size={24}
             color={tintColor}
             onPress={savePickedLocation}
-            />)
+            />),
+            title: "Pick Location",
         })
-    },[navigation, savePickedLocation]);
+    },[navigation, savePickedLocation, route.params]);
 
     return (
 

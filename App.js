@@ -49,7 +49,7 @@ export default function App() {
         })}
         />
         <Stack.Screen name='AddPlace' component={AddPlace} options={{title: 'Add a new place'}} />
-        <Stack.Screen name='Map' component={Map} options={{title: 'Pick location'}} />
+        <Stack.Screen name='Map' component={Map} />
         <Stack.Screen name='PlaceDetails' component={PlaceDetails} options={{
           title: 'Loading place...'
         }} />
